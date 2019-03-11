@@ -1,0 +1,17 @@
+{
+  "name": "com.jtfer.ecp",
+  "author": "Jtferson",
+  "displayName": "ECP Core",
+  "description": "ECP is a fork of LeoECS with adding pipeline pattern and entity type based filtering",
+  "unity": "2018.3",
+  "version": "2019.3.22-preview",
+  "keywords": [
+    "ecp",
+    "pipeline"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jtferson/Jtfer.Ecp"
+  }
+}
