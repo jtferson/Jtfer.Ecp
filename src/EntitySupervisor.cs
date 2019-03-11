@@ -21,6 +21,19 @@ namespace Unity.IL2CPP.CompilerServices {
     }
 }
 #endif
+#if DEBUG
+    /// <summary>
+    /// Debug interface for world events processing.
+    /// </summary>
+    public interface ISupervisorDebugListener
+    {
+        void OnEntityCreated(int entity);
+        void OnEntityRemoved(int entity);
+        void OnComponentAdded(int entity, object component);
+        void OnComponentRemoved(int entity, object component);
+        void OnWorldDestroyed(EntitySupervisor world);
+    }
+#endif
 #if ECP_ENABLE_WORLD_EVENTS
     /// <summary>
     /// Interface for world events processing.
@@ -152,13 +165,13 @@ namespace Unity.IL2CPP.CompilerServices {
         /// <summary>
         /// List of all debug listeners.
         /// </summary>
-        readonly System.Collections.Generic.List<ISupervisorEventListener> _debugListeners = new System.Collections.Generic.List<ISupervisorEventListener>(4);
+        readonly System.Collections.Generic.List<ISupervisorDebugListener> _debugListeners = new System.Collections.Generic.List<ISupervisorDebugListener>(4);
 
         /// <summary>
         /// Adds external event listener.
         /// </summary>
         /// <param name="listener">Event listener.</param>
-        public void AddDebugListener(ISupervisorEventListener listener)
+        public void AddDebugListener(ISupervisorDebugListener listener)
         {
             if (listener == null) { throw new Exception("Listener is null"); }
             if (_debugListeners.Contains(listener)) { throw new Exception("Listener already exists"); }
@@ -169,7 +182,7 @@ namespace Unity.IL2CPP.CompilerServices {
         /// Removes external event listener.
         /// </summary>
         /// <param name="listener">Event listener.</param>
-        public void RemoveDebugListener(ISupervisorEventListener listener)
+        public void RemoveDebugListener(ISupervisorDebugListener listener)
         {
             if (listener == null) { throw new Exception("Listener is null"); }
             _debugListeners.Remove(listener);

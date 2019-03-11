@@ -10,4 +10,24 @@
     <DefineConstants>NET_STANDARD_2_0;ECP_ENABLE_WORLD_EVENTS</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Jtfer.Ecp.csproj.meta" />
+    <None Remove="package.json.meta" />
+    <None Remove="src.meta" />
+    <None Remove="src\ComponentMask.cs.meta" />
+    <None Remove="src\ComponentPool.cs.meta" />
+    <None Remove="src\ContainerPool.cs.meta" />
+    <None Remove="src\Domain.cs.meta" />
+    <None Remove="src\EcpHelpers.cs.meta" />
+    <None Remove="src\EcpInjections.cs.meta" />
+    <None Remove="src\EntityFilter.cs.meta" />
+    <None Remove="src\EntityManager.cs.meta" />
+    <None Remove="src\EntityOwner.cs.meta" />
+    <None Remove="src\EntitySupervisor.cs.meta" />
+    <None Remove="src\EntityType.cs.meta" />
+    <None Remove="src\ObjectIndexer.cs.meta" />
+    <None Remove="src\Pipeline.cs.meta" />
+    <None Remove="src\PipelineContext.cs.meta" />
+  </ItemGroup>
+
 </Project>
