@@ -4,7 +4,7 @@
   "displayName": "ECP Core",
   "description": "ECP is a fork of LeoECS with adding pipeline pattern and entity type based filtering",
   "unity": "2018.3",
-  "version": "2019.3.22-preview",
+  "version": "2019.3.11",
   "keywords": [
     "ecp",
     "pipeline"
