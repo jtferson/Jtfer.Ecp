@@ -43,7 +43,7 @@ namespace Jtfer.Ecp
 
         protected abstract void AddOperations(Pipeline pipeline);
         protected abstract void AddContainers();
-        protected void AddContainer<T>()
+        public void AddContainer<T>()
          where T : IContainer, new()
         {
             T container;
@@ -67,6 +67,17 @@ namespace Jtfer.Ecp
             }
             
         }
+
+        public void Initialize(Pipeline pipeline)
+        {
+            if (_isActive)
+            {
+                pipeline.Initialize();
+                _isInitialized = true;
+            }
+
+        }
+
         public void Update()
         {
             if(_isActive)
@@ -75,6 +86,17 @@ namespace Jtfer.Ecp
                     Initialize();
 
                 _pipeline.Update();
+            }
+        }
+
+        public void Update(Pipeline pipeline)
+        {
+            if (_isActive)
+            {
+                if (!_isInitialized)
+                    Initialize();
+
+                pipeline.Update();
             }
         }
 
