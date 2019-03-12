@@ -43,7 +43,7 @@ namespace Jtfer.Ecp
 
         protected abstract void AddOperations(Pipeline pipeline);
         protected abstract void AddContainers();
-        public void AddContainer<T>()
+        public T AddContainer<T>()
          where T : IContainer, new()
         {
             T container;
@@ -54,6 +54,8 @@ namespace Jtfer.Ecp
                 Array.Resize(ref _containers, _containersCount << 1);
             }
             _containers[_containersCount++] = container;
+
+            return container;
         }
 
 
