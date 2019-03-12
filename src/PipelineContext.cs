@@ -58,6 +58,33 @@ namespace Jtfer.Ecp
             return container;
         }
 
+        public IContainer AddContainer(Type containerType)
+        {
+            IContainer container;
+            _containerPool.AddContainer(containerType, out container);
+
+            if (_containersCount == _containers.Length)
+            {
+                Array.Resize(ref _containers, _containersCount << 1);
+            }
+            _containers[_containersCount++] = container;
+
+            return container;
+        }
+
+        public IContainer AddContainer(IContainer container)
+        {
+            _containerPool.AddContainer(container);
+
+            if (_containersCount == _containers.Length)
+            {
+                Array.Resize(ref _containers, _containersCount << 1);
+            }
+            _containers[_containersCount++] = container;
+
+            return container;
+        }
+
 
 
         public void Initialize()

@@ -20,6 +20,12 @@ namespace Jtfer.Ecp
             AddContainer<T>(out container);
             return container;
         }
+        public IContainer AddContainer(Type containerType)
+        {
+            IContainer container;
+            AddContainer(containerType, out container);
+            return container;
+        }
         public ContainerPool AddContainer<T>(out T container)
             where T : IContainer, new()
         {
@@ -31,6 +37,28 @@ namespace Jtfer.Ecp
             _containers[_containersCount++] = container;
             return this;
         }
+
+        public ContainerPool AddContainer(Type containerType, out IContainer container)
+        {
+            if (_containersCount == _containers.Length)
+            {
+                Array.Resize(ref _containers, _containersCount << 1);
+            }
+            container = CreateContainer(containerType);
+            _containers[_containersCount++] = container;
+            return this;
+        }
+
+        public ContainerPool AddContainer(IContainer container)
+        {
+            if (_containersCount == _containers.Length)
+            {
+                Array.Resize(ref _containers, _containersCount << 1);
+            }
+            _containers[_containersCount++] = container;
+            return this;
+        }
+
         public IContainer GetContainer(Type containerType)
         {
 #if DEBUG
@@ -54,6 +82,11 @@ namespace Jtfer.Ecp
             where T : IContainer, new()
         {
             return new T();
+        }
+
+        private IContainer CreateContainer(Type containerType)
+        {
+            return (IContainer)Activator.CreateInstance(containerType);
         }
         public void Dispose()
         {
