@@ -33,6 +33,7 @@ namespace Jtfer.Ecp
             _containerPool = domain.GetContainerPool();
             _entityOwner = new EntityOwner();
             _domain.AddPipelineContext(this, _entityOwner);
+            AddContainers();
         }
 
         public void SetActive(bool isActive)
