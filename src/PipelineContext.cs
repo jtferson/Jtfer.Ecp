@@ -40,7 +40,7 @@ namespace Jtfer.Ecp
             _isActive = isActive;
         }
 
-        public void CreateOperations(PipelineBuilder builder, string name = null)
+        public Pipeline CreateOperations(PipelineBuilder builder, string name = null)
         {
             var pipeline = new Pipeline(_domain, _entityManager, name);
             if (_pipelineCount == _pipelines.Length)
@@ -49,6 +49,22 @@ namespace Jtfer.Ecp
             }
             _pipelines[_pipelineCount++] = pipeline;
             builder.AddOperationToPipeline(pipeline);
+
+            return pipeline;
+        }
+
+        public Pipeline CreateOperations(string name = null, params IPipelineOperation[] operations)
+        {
+            var pipeline = new Pipeline(_domain, _entityManager, name);
+            if (_pipelineCount == _pipelines.Length)
+            {
+                Array.Resize(ref _pipelines, _pipelineCount << 1);
+            }
+            _pipelines[_pipelineCount++] = pipeline;
+
+            foreach (var op in operations)
+                pipeline.Add(op);
+            return pipeline;
         }
 
         public void CreateOperations(string name = null)
