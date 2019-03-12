@@ -64,7 +64,7 @@ namespace Jtfer.Ecp
                 }
 
                 // IContainer
-                if (f.FieldType.IsSubclassOf(containerType) && !f.IsStatic)
+                if (containerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
                     f.SetValue(system, containerPool.GetContainer(f.FieldType));
                     continue;

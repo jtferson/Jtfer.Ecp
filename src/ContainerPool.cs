@@ -63,7 +63,7 @@ namespace Jtfer.Ecp
         {
 #if DEBUG
             if (containerType == null) { throw new Exception("ContainerType is null"); }
-            if (!containerType.IsSubclassOf(typeof(EntityFilter))) { throw new Exception(string.Format("Invalid container-type: {0}", containerType)); }
+            if (!typeof(IContainer).IsAssignableFrom(containerType)) { throw new Exception(string.Format("Invalid container-type: {0}", containerType)); }
 #endif
             for (int i = 0, iMax = _containersCount; i < iMax; i++)
             {
