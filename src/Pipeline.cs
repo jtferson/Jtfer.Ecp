@@ -38,6 +38,27 @@ namespace Jtfer.Ecp
     }
 #endif
 
+    public sealed class PipelineBuilder : IDisposable
+    {
+        IPipelineOperation[] _operations;
+
+        public PipelineBuilder(params IPipelineOperation[] operations)
+        {
+            _operations = operations;
+        }
+
+        public void AddOperationToPipeline(Pipeline pipeline)
+        {
+            foreach (var op in _operations)
+                pipeline.Add(op);
+        }
+
+        public void Dispose()
+        {
+            _operations = null;
+        }
+    }
+
     /// <summary>
     /// Logical group of systems.
     /// </summary>

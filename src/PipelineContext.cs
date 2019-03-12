@@ -7,11 +7,12 @@ namespace Jtfer.Ecp
     public abstract class PipelineContext : IDisposable
     {
         Domain _domain;
-        Pipeline _pipeline;
         EntityOwner _entityOwner;
         ContainerPool _containerPool;
         EntityManager _entityManager;
 
+        Pipeline[] _pipelines = new Pipeline[1];
+        int _pipelineCount;
 
         IContainer[] _containers = new IContainer[4];
         int _containersCount;
@@ -30,8 +31,6 @@ namespace Jtfer.Ecp
             _isActive = isActive;
             _domain = domain;
             _containerPool = domain.GetContainerPool();
-            _pipeline = new Pipeline(domain, _entityManager, name);
-            AddOperations(_pipeline);
             _entityOwner = new EntityOwner();
             _domain.AddPipelineContext(this, _entityOwner);
         }
@@ -41,8 +40,32 @@ namespace Jtfer.Ecp
             _isActive = isActive;
         }
 
+        public void CreateOperations(PipelineBuilder builder, string name = null)
+        {
+            var pipeline = new Pipeline(_domain, _entityManager, name);
+            if (_pipelineCount == _pipelines.Length)
+            {
+                Array.Resize(ref _pipelines, _pipelineCount << 1);
+            }
+            _pipelines[_pipelineCount++] = pipeline;
+            builder.AddOperationToPipeline(pipeline);
+        }
+
+        public void CreateOperations(string name = null)
+        {
+            var pipeline = new Pipeline(_domain, _entityManager, name);
+            if(_pipelineCount == _pipelines.Length)
+            {
+                Array.Resize(ref _pipelines, _pipelineCount << 1);
+            }
+            _pipelines[_pipelineCount++] = pipeline;
+
+            AddOperations(pipeline);
+        }
+
         protected abstract void AddOperations(Pipeline pipeline);
         protected abstract void AddContainers();
+
         public T AddContainer<T>()
          where T : IContainer, new()
         {
@@ -91,7 +114,8 @@ namespace Jtfer.Ecp
         {
             if(_isActive)
             {
-                _pipeline.Initialize();
+                for (var i = 0; i < _pipelineCount; i++)
+                    _pipelines[i].Initialize();
                 _isInitialized = true;
             }
             
@@ -114,7 +138,8 @@ namespace Jtfer.Ecp
                 if (!_isInitialized)
                     Initialize();
 
-                _pipeline.Update();
+                for (var i = 0; i < _pipelineCount; i++)
+                    _pipelines[i].Update();
             }
         }
 
