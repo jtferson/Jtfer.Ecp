@@ -118,7 +118,7 @@ namespace Jtfer.Ecp
             var worldType = domain.GetType();
             var supervisor = domain.GetSupervisor();
             var containerPool = domain.GetContainerPool();
-            var otherContainerType = typeof(IContainer);
+            var baseContainerType = typeof(IContainer);
             var supervisorType = typeof(EntitySupervisor);
             var filterType = typeof(EntityFilter);
             var ignoreType = typeof(EcpIgnoreInjectAttribute);
@@ -140,7 +140,7 @@ namespace Jtfer.Ecp
                 }
 
                 // IContainer
-                if (containerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
+                if (baseContainerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
                     f.SetValue(container, containerPool.GetContainer(f.FieldType));
                     continue;
