@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -122,7 +123,8 @@ namespace Jtfer.Ecp
             var filterType = typeof(EntityFilter);
             var ignoreType = typeof(EcpIgnoreInjectAttribute);
 
-            foreach (var f in containerType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            var allFields = GetAllFields(containerType);
+            foreach (var f in allFields)
             {
                 // skip fields with [EcsIgnoreInject] attribute.
                 if (Attribute.IsDefined(f, ignoreType))
@@ -167,6 +169,17 @@ namespace Jtfer.Ecp
                     }
                 }
             }
+        }
+
+        private static IEnumerable<FieldInfo> GetAllFields(Type t)
+        {
+            if (t == null)
+                return Enumerable.Empty<FieldInfo>();
+
+            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic |
+                                 BindingFlags.Instance |
+                                 BindingFlags.DeclaredOnly;
+            return t.GetFields(flags).Concat(GetAllFields(t.BaseType));
         }
     }
 }
