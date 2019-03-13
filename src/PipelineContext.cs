@@ -24,6 +24,8 @@ namespace Jtfer.Ecp
 
         internal int TypeIndex;
 
+        System.Collections.Generic.Dictionary<Type, object> _injections = new System.Collections.Generic.Dictionary<Type, object>(32);
+
         public PipelineContext(Domain domain, bool isActive = true, string name = null)
         {
             TypeIndex = Internals.EcpHelpers.ContextCount++;
@@ -133,6 +135,13 @@ namespace Jtfer.Ecp
             {
                 for (var i = 0; i < _pipelineCount; i++)
                     _pipelines[i].Initialize();
+
+#if !ECP_DISABLE_INJECT
+                for (var i = 0; i < _containersCount; i++)
+                {
+                    EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
+                }
+#endif
                 _isInitialized = true;
             }
             
@@ -143,6 +152,13 @@ namespace Jtfer.Ecp
             if (_isActive)
             {
                 pipeline.Initialize();
+
+#if !ECP_DISABLE_INJECT
+                for (var i = 0; i < _containersCount; i++)
+                {
+                    EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
+                }
+#endif
                 _isInitialized = true;
             }
 

@@ -107,7 +107,7 @@ namespace Jtfer.Ecp
         /// </summary>
         /// <param name="container">System to scan for injection.</param>
         /// <param name="world">EcsWorld instance to inject.</param>
-        public static void Inject(IContainer container, Domain domain, System.Collections.Generic.Dictionary<Type, object> injections)
+        public static void Inject(IContainer container, Domain domain, EntityManager entityManager, System.Collections.Generic.Dictionary<Type, object> injections)
         {
             var containerType = container.GetType();
             if (!Attribute.IsDefined(containerType, typeof(EcpInjectAttribute)))
@@ -138,7 +138,7 @@ namespace Jtfer.Ecp
                 }
 
                 // IContainer
-                if (f.FieldType.IsAssignableFrom(otherContainerType) && !f.IsStatic)
+                if (containerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
                     f.SetValue(container, containerPool.GetContainer(f.FieldType));
                     continue;
