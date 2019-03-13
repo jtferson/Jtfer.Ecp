@@ -17,6 +17,9 @@ namespace Jtfer.Ecp
         IContainer[] _containers = new IContainer[4];
         int _containersCount;
 
+        IInitContainer[] _initContainers = new IInitContainer[4];
+        int _initContainerCount;
+
         internal bool _isActive;
         bool _isInitialized = false;
 
@@ -97,6 +100,16 @@ namespace Jtfer.Ecp
             }
             _containers[_containersCount++] = container;
 
+            var initContainer = container as IInitContainer;
+            if(initContainer != null)
+            {
+                if (_initContainerCount == _initContainers.Length)
+                {
+                    Array.Resize(ref _initContainers, _initContainerCount << 1);
+                }
+                _initContainers[_initContainerCount++] = initContainer;
+            }
+
             return container;
         }
 
@@ -143,6 +156,11 @@ namespace Jtfer.Ecp
                 for (var i = 0; i < _pipelineCount; i++)
                     _pipelines[i].Initialize();
 
+                for (var i = 0; i < _initContainerCount; i++)
+                {
+                    _initContainers[i].Initialize();
+                }
+
                 _isInitialized = true;
             }
             
@@ -159,6 +177,12 @@ namespace Jtfer.Ecp
                 }
 #endif
                 pipeline.Initialize();
+
+                for (var i = 0; i < _initContainerCount; i++)
+                {
+                    _initContainers[i].Initialize();
+                }
+
                 _isInitialized = true;
             }
 
@@ -190,6 +214,13 @@ namespace Jtfer.Ecp
         public void Dispose()
         {
             _containers = null;
+            _containersCount = 0;
+
+            for (var i = 0; i < _initContainerCount; i++)
+            {
+                _initContainers[i].Destroy();
+            }
+            _initContainers = null;
             _containersCount = 0;
         }
     }

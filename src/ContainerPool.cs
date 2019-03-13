@@ -9,6 +9,13 @@ namespace Jtfer.Ecp
 
     }
 
+    public interface IInitContainer : IContainer
+    {
+        void Initialize();
+
+        void Destroy();
+    }
+
     public class ContainerPool : IDisposable
     {
         IContainer[] _containers = new IContainer[4];
