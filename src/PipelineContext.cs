@@ -153,13 +153,13 @@ namespace Jtfer.Ecp
                 }
 #endif
 
-                for (var i = 0; i < _pipelineCount; i++)
-                    _pipelines[i].Initialize();
-
                 for (var i = 0; i < _initContainerCount; i++)
                 {
                     _initContainers[i].Initialize();
                 }
+                for (var i = 0; i < _pipelineCount; i++)
+                    _pipelines[i].Initialize();
+
 
                 _isInitialized = true;
             }
@@ -176,13 +176,11 @@ namespace Jtfer.Ecp
                     EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
                 }
 #endif
-                pipeline.Initialize();
-
                 for (var i = 0; i < _initContainerCount; i++)
                 {
                     _initContainers[i].Initialize();
                 }
-
+                pipeline.Initialize();
                 _isInitialized = true;
             }
 
