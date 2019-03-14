@@ -139,28 +139,27 @@ namespace Jtfer.Ecp
 
             return container;
         }
-
-
-
+        public void Prepare()
+        {
+#if !ECP_DISABLE_INJECT
+            for (var i = 0; i < _containersCount; i++)
+            {
+                EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
+            }
+            for (var i = 0; i < _pipelineCount; i++)
+                _pipelines[i].Prepare();
+#endif
+        }
         public void Initialize()
         {
             if(_isActive)
             {
-#if !ECP_DISABLE_INJECT
-                for (var i = 0; i < _containersCount; i++)
-                {
-                    EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
-                }
-#endif
-
                 for (var i = 0; i < _initContainerCount; i++)
                 {
                     _initContainers[i].Initialize();
                 }
                 for (var i = 0; i < _pipelineCount; i++)
                     _pipelines[i].Initialize();
-
-
                 _isInitialized = true;
             }
             
@@ -170,12 +169,6 @@ namespace Jtfer.Ecp
         {
             if (_isActive)
             {
-#if !ECP_DISABLE_INJECT
-                for (var i = 0; i < _containersCount; i++)
-                {
-                    EcpInjections.Inject(_containers[i], _domain, _entityManager, _injections);
-                }
-#endif
                 for (var i = 0; i < _initContainerCount; i++)
                 {
                     _initContainers[i].Initialize();

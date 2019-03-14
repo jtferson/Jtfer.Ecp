@@ -300,19 +300,8 @@ namespace Jtfer.Ecp
         }
 #endif
 
-        /// <summary>
-        /// Closes registration for new systems, initialize all registered.
-        /// </summary>
-        public void Initialize()
+        public void Prepare()
         {
-#if DEBUG
-            if (_inited) { throw new Exception("EcsSystems instance already initialized"); }
-            for (var i = 0; i < _runSystemsCount; i++)
-            {
-                DisabledInDebugSystems.Add(false);
-            }
-            _inited = true;
-#endif
 #if !ECP_DISABLE_INJECT
             for (var i = 0; i < _injectSystemsCount; i++)
             {
@@ -328,6 +317,23 @@ namespace Jtfer.Ecp
                 EcpInjections.Inject(_injectSystems[i], _domain, _entityManager, _injections);
             }
 #endif
+        }
+
+
+        /// <summary>
+        /// Closes registration for new systems, initialize all registered.
+        /// </summary>
+        public void Initialize()
+        {
+#if DEBUG
+            if (_inited) { throw new Exception("EcsSystems instance already initialized"); }
+            for (var i = 0; i < _runSystemsCount; i++)
+            {
+                DisabledInDebugSystems.Add(false);
+            }
+            _inited = true;
+#endif
+
             for (var i = 0; i < _preInitSystemsCount; i++)
             {
                 _preInitSystems[i].PreInitialize();
