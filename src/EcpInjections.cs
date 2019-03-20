@@ -116,7 +116,7 @@ namespace Jtfer.Ecp
                 return;
             }
             var worldType = domain.GetType();
-            var supervisor = domain.GetSupervisor();
+            var entityManagerType = entityManager.GetType();
             var containerPool = domain.GetContainerPool();
             var baseContainerType = typeof(IContainer);
             var supervisorType = typeof(EntitySupervisor);
@@ -132,10 +132,10 @@ namespace Jtfer.Ecp
                     continue;
                 }
 
-                // EntitySupervisor
-                if (f.FieldType.IsAssignableFrom(supervisorType) && !f.IsStatic)
+                // EntityManager
+                if (f.FieldType.IsAssignableFrom(entityManagerType) && !f.IsStatic)
                 {
-                    f.SetValue(container, supervisor);
+                    f.SetValue(container, entityManager);
                     continue;
                 }
 
