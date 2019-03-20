@@ -117,6 +117,7 @@ namespace Jtfer.Ecp
             }
             var worldType = domain.GetType();
             var entityManagerType = entityManager.GetType();
+            var supervisor = domain.GetSupervisor();
             var containerPool = domain.GetContainerPool();
             var baseContainerType = typeof(IContainer);
             var supervisorType = typeof(EntitySupervisor);
