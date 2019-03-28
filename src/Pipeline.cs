@@ -217,13 +217,50 @@ namespace Jtfer.Ecp
         /// <returns>Amount of systems in list.</returns>
         public int GetRunSystems(ref IUpdateOperation[] list)
         {
-            if (list == null || list.Length < _runSystemsCount)
-            {
-                list = new IUpdateOperation[_runSystemsCount];
-            }
+            _runSystemsCount = _runSystemsCount - list.Length;
+            
             Array.Copy(_runSystems, 0, list, 0, _runSystemsCount);
             return _runSystemsCount;
         }
+
+        public int RemoveRunSystems(IUpdateOperation[] list)
+        {
+            var tempRunSystem = new IUpdateOperation[16];
+            var tempRunCount = 0;
+            for (var i = 0; i < _runSystemsCount; i++)
+            {
+                bool foundOperation = false;
+                for(var j = 0; j < list.Length; j++)
+                {
+                    if(_runSystems[i].GetType() == list[j].GetType())
+                    {
+                        foundOperation = true;
+                        break;
+                    }
+                }
+                if(!foundOperation)
+                {
+                    if (tempRunCount == tempRunSystem.Length)
+                    {
+                        Array.Resize(ref tempRunSystem, tempRunCount << 1);
+                    }
+                    tempRunSystem[tempRunCount++] = _runSystems[i];
+                }
+            }
+            for (var i = _runSystemsCount - 1; i >= 0; i--)
+            {
+                _runSystems[i] = null;
+            }
+            _runSystemsCount = 0;
+
+            for(var i = 0; i < tempRunCount; i++)
+            {
+                Add(tempRunSystem[i]);
+            }
+           
+            return _runSystemsCount;
+        }
+
 
         /// <summary>
         /// Adds new system to processing.
