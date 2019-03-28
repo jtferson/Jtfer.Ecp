@@ -46,6 +46,11 @@ namespace Jtfer.Ecp
             _isActive = isActive;
         }
 
+        public Pipeline GetDefaultPipeline()
+        {
+            return _pipelines[0];
+        }
+
         public Pipeline CreateOperations(PipelineBuilder builder, string name = null)
         {
             var pipeline = new Pipeline(_domain, _entityManager, name);
