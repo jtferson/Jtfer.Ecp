@@ -217,8 +217,6 @@ namespace Jtfer.Ecp
         /// <returns>Amount of systems in list.</returns>
         public int GetRunSystems(ref IUpdateOperation[] list)
         {
-            _runSystemsCount = _runSystemsCount - list.Length;
-            
             Array.Copy(_runSystems, 0, list, 0, _runSystemsCount);
             return _runSystemsCount;
         }
