@@ -155,6 +155,15 @@ namespace Jtfer.Ecp
                 _pipelines[i].Prepare();
 #endif
         }
+
+        public IContainer AddAndPrepare(IContainer container)
+        {
+            AddContainer(container);
+#if !ECP_DISABLE_INJECT
+            EcpInjections.Inject(container, _domain, _entityManager, _injections);
+#endif
+            return container;
+        }
         public void Initialize()
         {
             if(_isActive)
