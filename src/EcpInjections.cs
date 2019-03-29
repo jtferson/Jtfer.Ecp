@@ -16,6 +16,12 @@ namespace Jtfer.Ecp
     /// Attribute for ignore automatic DI injection to field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
+    public sealed class EcpInjectChildAttribute : Attribute { }
+
+    /// <summary>
+    /// Attribute for ignore automatic DI injection to field.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class EcpIgnoreInjectAttribute : Attribute { }
 
     /// <summary>
@@ -48,6 +54,7 @@ namespace Jtfer.Ecp
             var supervisorType = typeof(EntitySupervisor);
             var filterType = typeof(EntityFilter);
             var ignoreType = typeof(EcpIgnoreInjectAttribute);
+            var injectChildType = typeof(EcpInjectChildAttribute);
 
             foreach (var f in systemType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
@@ -55,6 +62,11 @@ namespace Jtfer.Ecp
                 if (Attribute.IsDefined(f, ignoreType))
                 {
                     continue;
+                }
+                var injectChild = false;
+                if (Attribute.IsDefined(f, injectChildType))
+                {
+                    injectChild = true;
                 }
 
                 // EntityManager
@@ -67,7 +79,7 @@ namespace Jtfer.Ecp
                 // IContainer
                 if (containerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
-                    f.SetValue(system, containerPool.GetContainer(f.FieldType));
+                    f.SetValue(system, containerPool.GetContainer(f.FieldType, injectChild));
                     continue;
                 }
 
@@ -124,6 +136,7 @@ namespace Jtfer.Ecp
             var supervisorType = typeof(EntitySupervisor);
             var filterType = typeof(EntityFilter);
             var ignoreType = typeof(EcpIgnoreInjectAttribute);
+            var injectChildType = typeof(EcpInjectChildAttribute);
 
             var allFields = GetAllFields(containerType);
             foreach (var f in allFields)
@@ -132,6 +145,12 @@ namespace Jtfer.Ecp
                 if (Attribute.IsDefined(f, ignoreType))
                 {
                     continue;
+                }
+
+                var injectChild = false;
+                if(Attribute.IsDefined(f, injectChildType))
+                {
+                    injectChild = true;
                 }
 
                 // EntityManager
@@ -144,7 +163,7 @@ namespace Jtfer.Ecp
                 // IContainer
                 if (baseContainerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
-                    f.SetValue(container, containerPool.GetContainer(f.FieldType));
+                    f.SetValue(container, containerPool.GetContainer(f.FieldType, injectChild));
                     continue;
                 }
 

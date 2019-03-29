@@ -66,7 +66,7 @@ namespace Jtfer.Ecp
             return this;
         }
 
-        public IContainer GetContainer(Type containerType)
+        public IContainer GetContainer(Type containerType, bool includeChild)
         {
 #if DEBUG
             if (containerType == null) { throw new Exception("ContainerType is null"); }
@@ -74,7 +74,7 @@ namespace Jtfer.Ecp
 #endif
             for (int i = 0, iMax = _containersCount; i < iMax; i++)
             {
-                if (_containers[i].GetType() == containerType)
+                if ((includeChild && containerType.IsAssignableFrom(_containers[i].GetType())) || _containers[i].GetType() == containerType)
                 {
                     return _containers[i];
                 }
