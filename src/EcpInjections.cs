@@ -120,6 +120,7 @@ namespace Jtfer.Ecp
             var supervisor = domain.GetSupervisor();
             var containerPool = domain.GetContainerPool();
             var baseContainerType = typeof(IContainer);
+            var contextType = typeof(PipelineContext);
             var supervisorType = typeof(EntitySupervisor);
             var filterType = typeof(EntityFilter);
             var ignoreType = typeof(EcpIgnoreInjectAttribute);
@@ -144,6 +145,13 @@ namespace Jtfer.Ecp
                 if (baseContainerType.IsAssignableFrom(f.FieldType) && !f.IsStatic)
                 {
                     f.SetValue(container, containerPool.GetContainer(f.FieldType));
+                    continue;
+                }
+
+                // PipelineContext
+                if (f.FieldType.IsSubclassOf(contextType) && !f.IsStatic)
+                {
+                    f.SetValue(container, domain.GetPipelineContext(f.FieldType));
                     continue;
                 }
 
