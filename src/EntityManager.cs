@@ -112,7 +112,7 @@ namespace Jtfer.Ecp
         public void RemoveComponent<T>(int entity, bool noError = false)
             where T : class, new()
         {
-            _supervisor.RemoveComponent<T>(entity);
+            _supervisor.RemoveComponent<T>(entity, noError);
         }
 #if NET_4_6 || NET_STANDARD_2_0
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
